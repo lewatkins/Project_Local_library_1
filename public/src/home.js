@@ -25,7 +25,7 @@ function getBooksBorrowedCount(books) {
 function getMostCommonGenres(books) {
     let allGenresArr = [];
 
-    books.forEach((book) => {
+    books.map((book) => {
         let allGenresObj = {};
         allGenresObj.name = book.genre
         allGenresArr.push(allGenresObj);
@@ -88,29 +88,35 @@ function getMostPopularAuthors(books, authors) {
         })
     });
 
+    const selectedAuthors = selectPopularAuthors(mostPopularAuthors);
+    return selectedAuthors;
+}
+
+// Helper Function
+
+function selectPopularAuthors(mostPopularAuthors) {
     mostPopularAuthors.sort((a, b) => {
         return a.name - b.name;
     });
 
-
-    const result = Object.values(
+    const selectedAuthors = Object.values(
         mostPopularAuthors.reduce((acc, item) => {
             acc[item.name] = acc[item.name] ? {...item, count: item.count + acc[item.name].count } : item;
             return acc;
         }, {})
     );
 
-    result.sort((a, b) => {
+    selectedAuthors.sort((a, b) => {
         return b.count - a.count;
     });
 
-
-    if (result.length > 4) {
-        result.length = 5;
+    if (selectedAuthors.length > 4) {
+        selectedAuthors.length = 5;
     }
 
-    return result;
+    return selectedAuthors;
 }
+
 
 module.exports = {
     getTotalBooksCount,
